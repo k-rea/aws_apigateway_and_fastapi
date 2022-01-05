@@ -66,6 +66,6 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/${{ secrets.AWS_ECR_REPO_NAME}}:$IMAGE_TAG ./project/Dockerfile.prod
+          docker build -f project/Dockerfile.prod -t $ECR_REGISTRY/${{ secrets.AWS_ECR_REPO_NAME}}:$IMAGE_TAG ./project
           docker push $ECR_REGISTRY/${{ secrets.AWS_ECR_REPO_NAME}}:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/${{ secrets.AWS_ECR_REPO_NAME}}:$IMAGE_TAG"
