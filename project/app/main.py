@@ -4,7 +4,7 @@ from mangum import Mangum
 app = FastAPI()
 
 
-@app.get('/ping')
+@app.get('/')
 async def pong():
     return {"ping": "pong!"}
 
