@@ -1,26 +1,6 @@
-FROM python:3.10.1-slim-buster
-RUN mkdir -p /home/app
-RUN addgroup --system app && adduser --system --group app
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV ENVIRONMENT prod
-ENV TESTING 0
+FROM public.ecr.aws/lambda/python:3.8
+COPY ./app/main.py ${LAMBDA_TASK_ROOT}
 
-RUN apt-get update \
-    && apt-get -y install netcat gcc postgresql \
-    && apt-get clean
-
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-RUN pip install "uvicorn[standard]==0.16.0"
-
-COPY . .
-
-RUN chown -R app:app $APP_HOME
-USER app
-CMD gunicorn --bind 0.0.0.0:$PORT app.main:app -k uvicorn.workers.UvicornWorker
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+CMD ["app.handler"]
