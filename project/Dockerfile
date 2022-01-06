@@ -1,4 +1,3 @@
-
 ARG FUNCTION_DIR="/function"
 FROM python:buster as build-image
 
