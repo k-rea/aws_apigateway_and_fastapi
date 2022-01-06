@@ -1,5 +1,5 @@
 ARG FUNCTION_DIR="/function"
-FROM python:buster as build-image
+FROM python:slim-buster as build-image
 
 RUN apt-get update && \
     apt-get install -y \
@@ -17,9 +17,9 @@ RUN pip install \
     awslambdaric
 
 
-FROM python:buster
+FROM python:slim-buster
 ARG FUNCTION_DIR
 WORKDIR ${FUNCTION_DIR}
 COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
-ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric"]
+ENTRYPOINT ["/usr/local/bin/python", "-m", "awslambdaric"]
 CMD ["main.handler"]
