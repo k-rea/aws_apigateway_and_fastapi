@@ -42,13 +42,12 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
-COPY ./scripts/entrypoint.sh ./scripts
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /usr/bin/aws-lambda-rie
+COPY ./scripts/entrypoint.sh ./scripts/
 RUN chmod +x ./scripts/entrypoint.sh /usr/bin/aws-lambda-rie
 
 RUN chown -R app:app $APP_HOME
 USER app
-
 
 #ENTRYPOINT ["/usr/local/bin/python", "-m", "awslambdaric"]
 ENTRYPOINT ["/home/app/web/scripts/entrypoint.sh"]
